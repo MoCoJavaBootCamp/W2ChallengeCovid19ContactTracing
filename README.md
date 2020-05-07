@@ -7,3 +7,5 @@ The tracing application prompts user for important details like:
  * symptoms
  * known contacts
  * visited locations
+ 
+ Then it will output a detailed report of all submitted details.
