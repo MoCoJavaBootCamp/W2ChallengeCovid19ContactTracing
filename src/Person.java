@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 public class Person {
     HashMap personalInfo = new HashMap<>();
+    Symptom symptoms = new Symptom();
 
     Person(HashMap personalInfo) {
         this.personalInfo = personalInfo;

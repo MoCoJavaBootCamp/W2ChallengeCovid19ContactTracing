@@ -7,7 +7,8 @@ public class Searcher {
         System.out.println("Welcome to the Center for Disease Control's " +
                 "COVID-19 Contact Tracing Program");
         Person patient = new Person(getInfo());
-//        HashMap personalInfo = getInfo();
+        // checkSymptoms((String) patient.personalInfo.get("name"), patient);
+        checkSymptoms((String) patient.personalInfo.get("name"), patient);
     }
 
     public static HashMap getInfo() {
@@ -27,19 +28,24 @@ public class Searcher {
         return personalInfo;
     };
 
-    public void checkSymptoms(String name, Person person) {
+    public static HashMap checkSymptoms(String name, Person person) {
         Scanner input = new Scanner(System.in);
         String[] symptoms = {"cough", "shortness of breath or difficulty breathing",
                 "tiredness", "aches", "chills", "sore throat", "loss of smell",
                 "loss of taste", "headache", "diarrhea", "severe vomiting"};
-        for (int i = 0; i < symptoms.length; i += 1) {
-            System.out.printf("Does %s have any symptoms for %s? (y/n)\n", name, symptoms[i]);
+        for (String symptom : symptoms) {
+            System.out.printf("Does %s have any symptoms for %s? (y/n)\n", name, symptom);
             String response = input.nextLine();
             if (response.equalsIgnoreCase("y")) {
-                System.out.printf("How long has %s had symptoms for %s?\n", name, symptoms[i]);
-
+                System.out.printf("How many days has %s had symptoms for %s?\n", name, symptom);
+                int length = input.nextInt();
+                input.nextLine();
+                person.symptoms.symptomMap.put(symptom, length);
+            } else {
+                person.symptoms.symptomMap.put(symptom, 0);
             }
         }
+        return person.symptoms.symptomMap;
     }
 
     public void traceContacts() {
