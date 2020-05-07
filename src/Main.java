@@ -12,22 +12,13 @@ public class Main {
         getInfo(patient);
         String patientName = patient.getPersonalInfo("name");
         //check symptoms
-        checkSymptoms(patientName, patient);
+        checkSymptoms(patient, patientName);
         //trace contacts
-        System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
-        String response = "y";
-        response = input.nextLine();
-        while (response.equalsIgnoreCase("y")) {
-            traceContacts(patient, patientName);
-            System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
-            response = input.nextLine();
-        }
-
-        //print known contacts
-        System.out.println("\t\tKnown Contacts:");
-        patient.getKnownContacts();
-
-        //print known locations
+        traceContacts(patient, patientName);
+        //trace places
+        tracePlaces(patient);
+        //print report
+        getReport(patient);
     }
 
     public static void getInfo(Person person) {
@@ -46,7 +37,7 @@ public class Main {
         person.setPersonalInfo("state", input.nextLine());
     };
 
-    public static void checkSymptoms(String patientName, Person person) {
+    public static void checkSymptoms(Person person, String patientName) {
         Scanner input = new Scanner(System.in);
         String[] symptoms = {"cough", "shortness of breath or difficulty breathing",
                 "tiredness", "aches", "chills", "sore throat", "loss of smell",
@@ -67,30 +58,65 @@ public class Main {
 
     public static void traceContacts(Person patient, String patientName) {
         Scanner input = new Scanner(System.in);
-        Person contact = new Person();
-        System.out.println("What is his/her full name?");
-        contact.setPersonalInfo("name", input.nextLine());
-        String name = contact.getPersonalInfo("name");
-        System.out.printf("What is %s's phone number?\n", name);
-        contact.setPersonalInfo("phone", input.nextLine());
-        System.out.printf("What is %s's email?\n", name);
-        contact.setPersonalInfo("email", input.nextLine());
-        System.out.printf("What city does %s live in?\n", name);
-        contact.setPersonalInfo("city", input.nextLine());
-        System.out.printf("What state does %s live in?\n", name);
-        contact.setPersonalInfo("state", input.nextLine());
-        System.out.printf("What city did %s see %s?\n", patientName, name);
-        contact.setPersonalInfo("contactedCity", input.nextLine());
-        System.out.printf("What state did %s see %s?\n", patientName, name);
-        contact.setPersonalInfo("contactedState", input.nextLine());
-        System.out.printf("When did %s see %s? (mm/dd/yyyy)\n", patientName, name);
-        contact.setPersonalInfo("date", input.nextLine());
-        patient.setKnownContacts(contact);
+        System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
+        String response = input.nextLine();
+
+        while (response.equalsIgnoreCase("y")) {
+            Person contact = new Person();
+            System.out.println("What is his/her full name?");
+            contact.setPersonalInfo("name", input.nextLine());
+            String name = contact.getPersonalInfo("name");
+            System.out.printf("What is %s's phone number?\n", name);
+            contact.setPersonalInfo("phone", input.nextLine());
+            System.out.printf("What is %s's email?\n", name);
+            contact.setPersonalInfo("email", input.nextLine());
+            System.out.printf("What city does %s live in?\n", name);
+            contact.setPersonalInfo("city", input.nextLine());
+            System.out.printf("What state does %s live in?\n", name);
+            contact.setPersonalInfo("state", input.nextLine());
+            System.out.printf("What city did %s see %s?\n", patientName, name);
+            contact.setPersonalInfo("contactedCity", input.nextLine());
+            System.out.printf("What state did %s see %s?\n", patientName, name);
+            contact.setPersonalInfo("contactedState", input.nextLine());
+            System.out.printf("When did %s see %s? (mm/dd/yyyy)\n", patientName, name);
+            contact.setPersonalInfo("date", input.nextLine());
+            patient.setKnownContacts(contact);
+            System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
+            response = input.nextLine();
+        }
     }
 
-//    public static void tracePlaces(Person patient) {
-//        Scanner input = new Scanner(System.in);
-//        System.out.println("What is his/her name?");
-//        contact.setPersonalInfo("name", input.nextLine());
-//    }
+    public static void tracePlaces(Person patient) {
+        Scanner input = new Scanner(System.in);
+        String name = patient.getPersonalInfo("name");
+        System.out.printf("Did %s visit any where in the past 14 days? (y/n)\n", name);
+        String response = input.nextLine();
+
+        while (response.equalsIgnoreCase("y")) {
+            Location location = new Location();
+            System.out.println("What is the name of the visited place?");
+            location.setName(input.nextLine());
+            System.out.println("What city is the visited place?");
+            location.setCity(input.nextLine());
+            System.out.println("What state is the visited place?");
+            location.setState(input.nextLine());
+            System.out.println("What date was the place visited? (mm/dd/yyyy)");
+            location.setVisitDate(input.nextLine());
+            patient.visitedPlaces.add(location);
+            System.out.printf("Did %s visit any where else in the past 14 days? (y/n)\n", name);
+            response = input.nextLine();
+        }
+
+    }
+
+    public static void getReport(Person person) {
+        System.out.println("***** Contact Tracing Report *****");
+        person.getAllPersonalInfo();
+        System.out.println("**\t\t Symptoms:");
+        person.getAllSymptoms();
+        System.out.println("\n**\t\t Contacts:");
+        person.getKnownContacts();
+        System.out.println("**\t\t Recently Visited Locations:");
+        person.getVisitedPlaces();
+    }
 }
