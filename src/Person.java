@@ -7,6 +7,22 @@ public class Person {
     Person(HashMap personalInfo) {
         this.personalInfo = personalInfo;
     };
+
+    public HashMap getPersonalInfo() {
+        return personalInfo;
+    }
+
+    public void setPersonalInfo(HashMap personalInfo) {
+        this.personalInfo = personalInfo;
+    }
+
+    public Symptom getSymptoms() {
+        return symptoms;
+    }
+
+    public void setSymptoms(Symptom symptoms) {
+        this.symptoms = symptoms;
+    }
 }
 
 /*
