@@ -6,62 +6,91 @@ public class Main {
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome to the Center for Disease Control's " +
                 "COVID-19 Contact Tracing Program");
-        Person patient = new Person(getInfo());
-        // checkSymptoms((String) patient.personalInfo.get("name"), patient);
-        checkSymptoms((String) patient.personalInfo.get("name"), patient);
+        //make new patient
+        Person patient = new Person();
+        //set patient info
+        getInfo(patient);
+        String patientName = patient.getPersonalInfo("name");
+        //check symptoms
+        checkSymptoms(patientName, patient);
+        //trace contacts
+        System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
+        String response = "y";
+        response = input.nextLine();
+        while (response.equalsIgnoreCase("y")) {
+            traceContacts(patient, patientName);
+            System.out.printf("Has %s met or run into anyone else? (y/n)\n", patientName);
+            response = input.nextLine();
+        }
+
+        //print known contacts
+        System.out.println("\t\tKnown Contacts:");
+        patient.getKnownContacts();
+
+        //print known locations
     }
 
-    public static HashMap getInfo() {
+    public static void getInfo(Person person) {
         Scanner input = new Scanner(System.in);
         HashMap<String, String> personalInfo = new HashMap<>();
         System.out.println("Enter newly infected person's information");
-        System.out.println("What is the patient's name?");
-        personalInfo.put("name", input.nextLine());
+        System.out.println("What is the patient's full name?");
+        person.setPersonalInfo("name", input.nextLine());
         System.out.println("What is the patient's phone number?");
-        personalInfo.put("phone", input.nextLine());
+        person.setPersonalInfo("phone", input.nextLine());
         System.out.println("What is the patient's email?");
-        personalInfo.put("email", input.nextLine());
+        person.setPersonalInfo("email", input.nextLine());
         System.out.println("What city does the patient live in?");
-        personalInfo.put("city", input.nextLine());
+        person.setPersonalInfo("city", input.nextLine());
         System.out.println("What what state does the patient live in?");
-        personalInfo.put("state", input.nextLine());
-        return personalInfo;
+        person.setPersonalInfo("state", input.nextLine());
     };
 
-    public static HashMap checkSymptoms(String name, Person person) {
+    public static void checkSymptoms(String patientName, Person person) {
         Scanner input = new Scanner(System.in);
         String[] symptoms = {"cough", "shortness of breath or difficulty breathing",
                 "tiredness", "aches", "chills", "sore throat", "loss of smell",
                 "loss of taste", "headache", "diarrhea", "severe vomiting"};
         for (String symptom : symptoms) {
-            System.out.printf("Does %s have any symptoms for %s? (y/n)\n", name, symptom);
+            System.out.printf("Does %s have any symptoms for %s? (y/n)\n", patientName, symptom);
             String response = input.nextLine();
             if (response.equalsIgnoreCase("y")) {
-                System.out.printf("How many days has %s had symptoms for %s?\n", name, symptom);
+                System.out.printf("How many days has %s had symptoms for %s?\n", patientName, symptom);
                 int length = input.nextInt();
                 input.nextLine();
-                person.symptoms.symptomMap.put(symptom, length);
+                person.setSymptoms(symptom, length);
             } else {
-                person.symptoms.symptomMap.put(symptom, 0);
+                person.setSymptoms(symptom, 0);
             }
         }
-        return person.symptoms.symptomMap;
     }
 
-    public void traceContacts(String patientName) {
+    public static void traceContacts(Person patient, String patientName) {
         Scanner input = new Scanner(System.in);
-        System.out.println("What is his/her name?");
-
-        System.out.println("What is his/her phone number?");
-        System.out.println("What is his/her email?");
-        System.out.println("What city does he/she live in?");
-        System.out.println("What state does he/she live in?");
-        System.out.println("What city did see him/her?");
-        System.out.println("What state did see him/her?");
-        System.out.println("When did see him/her? (mm/dd/yyyy)");
+        Person contact = new Person();
+        System.out.println("What is his/her full name?");
+        contact.setPersonalInfo("name", input.nextLine());
+        String name = contact.getPersonalInfo("name");
+        System.out.printf("What is %s's phone number?\n", name);
+        contact.setPersonalInfo("phone", input.nextLine());
+        System.out.printf("What is %s's email?\n", name);
+        contact.setPersonalInfo("email", input.nextLine());
+        System.out.printf("What city does %s live in?\n", name);
+        contact.setPersonalInfo("city", input.nextLine());
+        System.out.printf("What state does %s live in?\n", name);
+        contact.setPersonalInfo("state", input.nextLine());
+        System.out.printf("What city did %s see %s?\n", patientName, name);
+        contact.setPersonalInfo("contactedCity", input.nextLine());
+        System.out.printf("What state did %s see %s?\n", patientName, name);
+        contact.setPersonalInfo("contactedState", input.nextLine());
+        System.out.printf("When did %s see %s? (mm/dd/yyyy)\n", patientName, name);
+        contact.setPersonalInfo("date", input.nextLine());
+        patient.setKnownContacts(contact);
     }
 
-    public void tracePlaces() {
-        // get travel history
-    }
+//    public static void tracePlaces(Person patient) {
+//        Scanner input = new Scanner(System.in);
+//        System.out.println("What is his/her name?");
+//        contact.setPersonalInfo("name", input.nextLine());
+//    }
 }
