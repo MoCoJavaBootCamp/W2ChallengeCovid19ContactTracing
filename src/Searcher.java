@@ -4,11 +4,13 @@ import java.util.Scanner;
 public class Searcher {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        System.out.println("Welcome to the Center for Disease Control's COVID-19 Contact Tracing Program");
-
+        System.out.println("Welcome to the Center for Disease Control's " +
+                "COVID-19 Contact Tracing Program");
+        Person patient = new Person(getInfo());
+//        HashMap personalInfo = getInfo();
     }
 
-    public void getInfo() {
+    public static HashMap getInfo() {
         Scanner input = new Scanner(System.in);
         HashMap<String, String> personalInfo = new HashMap<>();
         System.out.println("Enter newly infected person's information");
@@ -22,9 +24,10 @@ public class Searcher {
         personalInfo.put("city", input.nextLine());
         System.out.println("What what state does the patient live in?");
         personalInfo.put("state", input.nextLine());
+        return personalInfo;
     };
 
-    public void checkSymptoms(String name) {
+    public void checkSymptoms(String name, Person person) {
         Scanner input = new Scanner(System.in);
         String[] symptoms = {"cough", "shortness of breath or difficulty breathing",
                 "tiredness", "aches", "chills", "sore throat", "loss of smell",
